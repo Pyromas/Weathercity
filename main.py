@@ -28,7 +28,23 @@ def plot_cities_by_density(cities_df, min_density, max_density):
     
     return city_map
 
+def plot_cities_by_country_and_density(cities_df, country, min_density, max_density):
+    filtered_cities = cities_df[(cities_df['country'] == country) & 
+                                (cities_df['density'] >= min_density) & 
+                                (cities_df['density'] <= max_density)]
+    
+    
+    first_city = filtered_cities.iloc[0]
+    city_map = folium.Map(location=[first_city['lat'], first_city['lon']], zoom_start=5)
+    
+    for _, city in filtered_cities.iterrows():
+        folium.Marker([city['lat'], city['lon']], popup=city['name']).add_to(city_map)
+    
+    return city_map
 
+
+# country_density_map = plot_cities_by_country_and_density(cities_df, 'CountryName', min_density=1000, max_density=5000)
+# country_density_map.save('country_density_cities_map.html')
 # density_map = plot_cities_by_density(cities_df, min_density=1000, max_density=5000)
 # density_map.save('density_cities_map.html')
 # cities_df should be a DataFrame containing 'name', 'lat', 'lon', 'country', and other relevant columns
